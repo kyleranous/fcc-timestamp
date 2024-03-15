@@ -39,9 +39,17 @@ app.get("/api", function (req, res) {
 
 
 app.get("/api/:date", function (req, res) {
-  var dateString = req.params.date;
-  // Convert Date Object to Unix Time Stamp
-  var unixTime = Date.parse(dateString);
+  var queryDate = req.params.date;
+  // Check if queryDate is a number (Unix Time Stamp)
+  if (!isNaN(Number(queryDate))){
+    queryDate = Number(queryDate);
+    console.log(queryDate);
+    var unixTime = new Date(queryDate);
+  }
+  else {
+    // Convert Date Object to Unix Time Stamp
+    var unixTime = new Date(Date.parse(queryDate));
+  }
  // check if date is valid
   if (isNaN(unixTime)) {
     // if not populate response with error message
@@ -50,12 +58,12 @@ app.get("/api/:date", function (req, res) {
     }
   } else {
     // Convert Date Object to UTC Time Stamp
-    var utcDate =  new Date(unixTime);
-    var utcTime = utcDate.toUTCString();
+    //var utcDate = unixTime.getTime();
+    //var utcTime = unixTime.toUTCString();
     // Populate Response Object
     var response = {
-      "unix": unixTime,
-      "utc": utcTime
+      "unix": unixTime.getTime(),
+      "utc": unixTime.toUTCString()
     };
   }
   //  Return the Response
