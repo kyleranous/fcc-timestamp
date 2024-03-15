@@ -24,23 +24,34 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// /api/ should return the current time
+app.get("/api", function (req, res) {
+  currentTime = new Date()
+
+  var response = {
+    "unix": currentTime.getTime(),
+    "utc": currentTime.toUTCString()
+  };
+
+  res.json(response);
+
+});
+
 
 app.get("/api/:date", function (req, res) {
   var dateString = req.params.date;
   // Convert Date Object to Unix Time Stamp
   var unixTime = Date.parse(dateString);
-  
-  
  // check if date is valid
   if (isNaN(unixTime)) {
     // if not populate response with error message
     var response = {
-      "error": `${dateString} is not a valid date.`
+      "error": "Invalid Date"
     }
   } else {
     // Convert Date Object to UTC Time Stamp
     var utcDate =  new Date(unixTime);
-    var utcTime = utcDate.toUTCString(utcDate);
+    var utcTime = utcDate.toUTCString();
     // Populate Response Object
     var response = {
       "unix": unixTime,
